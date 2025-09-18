@@ -2,95 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Carbon Footprint Tracker Design System - Eco-friendly theme with nature-inspired colors */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core background and text */
+    --background: 120 20% 98%;
+    --foreground: 140 15% 15%;
 
+    /* Card components */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 140 15% 15%;
 
+    /* Popover components */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 140 15% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Deep forest green */
+    --primary: 140 60% 25%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 140 70% 35%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Soft sage green */
+    --secondary: 120 25% 85%;
+    --secondary-foreground: 140 40% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted tones */
+    --muted: 120 15% 92%;
+    --muted-foreground: 140 10% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Fresh lime green */
+    --accent: 110 50% 70%;
+    --accent-foreground: 140 50% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Success - Bright eco green */
+    --success: 125 65% 45%;
+    --success-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Warning - Earth orange */
+    --warning: 35 85% 55%;
+    --warning-foreground: 0 0% 98%;
 
-    --radius: 0.5rem;
+    /* Destructive */
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 98%;
 
-    --sidebar-background: 0 0% 98%;
+    /* Borders and inputs */
+    --border: 120 20% 85%;
+    --input: 120 20% 90%;
+    --ring: 140 60% 25%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Custom eco gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(110 70% 60%));
+    --gradient-nature: linear-gradient(135deg, hsl(120 40% 75%), hsl(140 50% 65%));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(120 25% 95%));
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Shadows with green tints */
+    --shadow-soft: 0 4px 20px -2px hsl(120 30% 70% / 0.1);
+    --shadow-medium: 0 8px 30px -4px hsl(140 40% 60% / 0.15);
+    --shadow-strong: 0 20px 40px -8px hsl(140 50% 50% / 0.2);
+    --shadow-glow: 0 0 30px hsl(var(--success) / 0.3);
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark mode - Deep forest theme */
+    --background: 140 40% 8%;
+    --foreground: 120 20% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 140 35% 10%;
+    --card-foreground: 120 20% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 140 35% 10%;
+    --popover-foreground: 120 20% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 140 70% 65%;
+    --primary-foreground: 140 40% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 140 20% 20%;
+    --secondary-foreground: 120 20% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 140 25% 15%;
+    --muted-foreground: 120 15% 70%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 110 60% 60%;
+    --accent-foreground: 140 40% 8%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --success: 125 70% 55%;
+    --success-foreground: 140 40% 8%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --warning: 35 85% 65%;
+    --warning-foreground: 140 40% 8%;
+
+    --destructive: 0 70% 65%;
+    --destructive-foreground: 140 40% 8%;
+
+    --border: 140 30% 25%;
+    --input: 140 25% 20%;
+    --ring: 140 70% 65%;
+
+    --sidebar-background: 140 35% 10%;
+    --sidebar-foreground: 120 20% 85%;
+    --sidebar-primary: 140 70% 55%;
+    --sidebar-primary-foreground: 140 40% 8%;
+    --sidebar-accent: 140 25% 15%;
+    --sidebar-accent-foreground: 120 20% 85%;
+    --sidebar-border: 140 30% 20%;
+    --sidebar-ring: 140 70% 65%;
   }
 }
 
@@ -100,6 +124,75 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+
+  /* Custom utility classes for the eco theme */
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-success {
+    background: var(--gradient-success);
+  }
+
+  .gradient-nature {
+    background: var(--gradient-nature);
+  }
+
+  .gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+
+  .shadow-eco-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-eco-medium {
+    box-shadow: var(--shadow-medium);
+  }
+
+  .shadow-eco-strong {
+    box-shadow: var(--shadow-strong);
+  }
+
+  .shadow-eco-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@layer components {
+  /* Eco-themed animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes grow {
+    0% { transform: scale(0.95); }
+    100% { transform: scale(1.05); }
+  }
+
+  /* Progress bar animation */
+  .progress-fill {
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Habit card hover effects */
+  .habit-card {
+    transition: var(--transition-smooth);
+  }
+
+  .habit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-eco-medium);
   }
 }
