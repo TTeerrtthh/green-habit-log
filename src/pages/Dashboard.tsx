@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { HabitSelector } from "@/components/HabitSelector";
 import { DailyLogger } from "@/components/DailyLogger";
 import { StatsCards } from "@/components/StatsCards";
 import { ProgressChart } from "@/components/ProgressChart";
@@ -10,9 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart3, Calendar } from "lucide-react";
 
-const Index = () => {
+const Dashboard = () => {
   const [habitLogs, setHabitLogs] = useState<HabitLog[]>([]);
-  const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
   const { toast } = useToast();
 
   // Initialize with some demo data to show functionality
@@ -95,107 +93,42 @@ const Index = () => {
     });
   };
 
-  const handleExportData = () => {
-    const csvContent = [
-      ['Date', 'Habit', 'CO2 Saved (kg)', 'Notes'].join(','),
-      ...habitLogs.map(log => {
-        const habit = HABIT_TYPES.find(h => h.id === log.habit_type);
-        return [
-          log.date,
-          `"${habit?.name || log.habit_type}"`,
-          log.co2_saved,
-          `"${log.notes || ''}"`
-        ].join(',');
-      })
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `carbon-footprint-data-${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    toast({
-      title: "Data exported",
-      description: "Your habit data has been exported as CSV.",
-    });
-  };
-
-  const handleHabitToggle = (habitId: string) => {
-    setSelectedHabits(prev => 
-      prev.includes(habitId)
-        ? prev.filter(id => id !== habitId)
-        : [...prev, habitId]
-    );
-  };
-
-  // Home page component
-  const HomePage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <main className="container mx-auto px-4 py-12">
-        <HabitSelector 
-          selectedHabits={selectedHabits}
-          onHabitToggle={handleHabitToggle}
-        />
-      </main>
-    </div>
-  );
-
-  // Dashboard page component  
-  const DashboardPage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="stats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:w-[400px]">
-            <TabsTrigger value="stats" className="flex items-center space-x-2">
-              <BarChart3 className="w-4 h-4" />
-              <span>Statistics</span>
-            </TabsTrigger>
-            <TabsTrigger value="logger" className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4" />
-              <span>Log Habits</span>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="stats" className="space-y-6">
-            <StatsCards habitLogs={habitLogs} />
-            <ProgressChart habitLogs={habitLogs} />
-          </TabsContent>
-
-          <TabsContent value="logger">
-            <DailyLogger 
-              habitLogs={habitLogs} 
-              onLogHabit={handleLogHabit}
-            />
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
-  );
-
-  // Placeholder pages
-  const PlaceholderPage = ({ title }: { title: string }) => (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <main className="container mx-auto px-4 py-12">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
-          <p className="text-muted-foreground">Coming soon...</p>
-        </div>
-      </main>
-    </div>
-  );
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-1">
-        <HomePage />
+        <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+          <main className="container mx-auto px-4 py-8">
+            <Tabs defaultValue="stats" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2 lg:w-[400px]">
+                <TabsTrigger value="stats" className="flex items-center space-x-2">
+                  <BarChart3 className="w-4 h-4" />
+                  <span>Statistics</span>
+                </TabsTrigger>
+                <TabsTrigger value="logger" className="flex items-center space-x-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>Log Habits</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="stats" className="space-y-6">
+                <StatsCards habitLogs={habitLogs} />
+                <ProgressChart habitLogs={habitLogs} />
+              </TabsContent>
+
+              <TabsContent value="logger">
+                <DailyLogger 
+                  habitLogs={habitLogs} 
+                  onLogHabit={handleLogHabit}
+                />
+              </TabsContent>
+            </Tabs>
+          </main>
+        </div>
       </div>
       <Footer />
     </div>
   );
 };
 
-export default Index;
+export default Dashboard;
