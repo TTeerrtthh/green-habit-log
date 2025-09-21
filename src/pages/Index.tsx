@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Leaf, BarChart3, Calendar, Download } from "lucide-react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { HabitSelector } from "@/components/HabitSelector";
 import { DailyLogger } from "@/components/DailyLogger";
 import { StatsCards } from "@/components/StatsCards";
 import { ProgressChart } from "@/components/ProgressChart";
 import { HabitLog, HABIT_TYPES } from "@/types";
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BarChart3, Calendar } from "lucide-react";
 
 const Index = () => {
   const [habitLogs, setHabitLogs] = useState<HabitLog[]>([]);
+  const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
   const { toast } = useToast();
 
   // Initialize with some demo data to show functionality
@@ -122,46 +124,35 @@ const Index = () => {
     });
   };
 
-  const totalCO2Saved = habitLogs.reduce((sum, log) => sum + log.co2_saved, 0);
+  const handleHabitToggle = (habitId: string) => {
+    setSelectedHabits(prev => 
+      prev.includes(habitId)
+        ? prev.filter(id => id !== habitId)
+        : [...prev, habitId]
+    );
+  };
 
-  return (
-    <div className="min-h-screen gradient-subtle">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <div className="gradient-primary p-3 rounded-xl">
-                <Leaf className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold">Carbon Footprint Tracker</h1>
-                <p className="text-muted-foreground">Track your daily sustainable habits and environmental impact</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Badge variant="secondary" className="bg-success/20 text-success px-4 py-2">
-                {Math.round(totalCO2Saved * 10) / 10}kg CO₂ saved total
-              </Badge>
-              <Button 
-                variant="outline" 
-                onClick={handleExportData}
-                className="hidden sm:flex"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Export Data
-              </Button>
-            </div>
-          </div>
-        </div>
+  // Home page component
+  const HomePage = () => (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <main className="container mx-auto px-4 py-12">
+        <HabitSelector 
+          selectedHabits={selectedHabits}
+          onHabitToggle={handleHabitToggle}
+        />
+      </main>
+    </div>
+  );
 
-        {/* Main Content */}
-        <Tabs defaultValue="dashboard" className="space-y-6">
+  // Dashboard page component  
+  const DashboardPage = () => (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <main className="container mx-auto px-4 py-8">
+        <Tabs defaultValue="stats" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 lg:w-[400px]">
-            <TabsTrigger value="dashboard" className="flex items-center space-x-2">
+            <TabsTrigger value="stats" className="flex items-center space-x-2">
               <BarChart3 className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span>Statistics</span>
             </TabsTrigger>
             <TabsTrigger value="logger" className="flex items-center space-x-2">
               <Calendar className="w-4 h-4" />
@@ -169,7 +160,7 @@ const Index = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="dashboard" className="space-y-6">
+          <TabsContent value="stats" className="space-y-6">
             <StatsCards habitLogs={habitLogs} />
             <ProgressChart habitLogs={habitLogs} />
           </TabsContent>
@@ -181,24 +172,38 @@ const Index = () => {
             />
           </TabsContent>
         </Tabs>
-
-        {/* Footer Note */}
-        <Card className="mt-12 bg-primary/5 border-primary/20">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <h3 className="font-semibold mb-2">Ready to add backend functionality?</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                To enable user authentication, database storage, and real data persistence, 
-                connect your project to Supabase using our native integration.
-              </p>
-              <Button variant="outline" className="border-primary/30 hover:bg-primary/10">
-                Learn about Supabase Integration
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      </main>
     </div>
+  );
+
+  // Placeholder pages
+  const PlaceholderPage = ({ title }: { title: string }) => (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <main className="container mx-auto px-4 py-12">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">{title}</h1>
+          <p className="text-muted-foreground">Coming soon...</p>
+        </div>
+      </main>
+    </div>
+  );
+
+  return (
+    <Router>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/track" element={<DashboardPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/insights" element={<PlaceholderPage title="Green Insights" />} />
+            <Route path="/about" element={<PlaceholderPage title="About" />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
+    </Router>
   );
 };
 
