@@ -1,201 +1,124 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { HabitSelector } from "@/components/HabitSelector";
-import { DailyLogger } from "@/components/DailyLogger";
-import { StatsCards } from "@/components/StatsCards";
-import { ProgressChart } from "@/components/ProgressChart";
-import { HabitLog, HABIT_TYPES } from "@/types";
-import { useToast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, Calendar } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { TrendingUp, Users, Leaf, Target, ArrowRight } from "lucide-react";
 
-const Index = () => {
-  const [habitLogs, setHabitLogs] = useState<HabitLog[]>([]);
-  const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
-  const { toast } = useToast();
+export default function Index() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
-  // Initialize with some demo data to show functionality
   useEffect(() => {
-    const generateDemoData = () => {
-      const demoLogs: HabitLog[] = [];
-      const today = new Date();
-      
-      // Generate data for the last 2 weeks
-      for (let i = 0; i < 14; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
-        
-        // Randomly add 1-3 habits per day with some missing days
-        if (Math.random() > 0.2) { // 80% chance of logging something
-          const numHabits = Math.floor(Math.random() * 3) + 1;
-          const shuffledHabits = [...HABIT_TYPES].sort(() => Math.random() - 0.5);
-          
-          for (let j = 0; j < numHabits; j++) {
-            const habit = shuffledHabits[j];
-            demoLogs.push({
-              id: `demo-${i}-${j}`,
-              user_id: 'demo-user',
-              habit_type: habit.id,
-              co2_saved: habit.co2_saved,
-              date: dateStr,
-              notes: Math.random() > 0.7 ? `Demo note for ${habit.name}` : undefined,
-              created_at: new Date(date.getTime() + j * 1000)
-            });
-          }
-        }
-      }
-      
-      return demoLogs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    };
-
-    const savedLogs = localStorage.getItem('carbonTracker_habitLogs');
-    if (savedLogs) {
-      setHabitLogs(JSON.parse(savedLogs));
-    } else {
-      const demoData = generateDemoData();
-      setHabitLogs(demoData);
-      localStorage.setItem('carbonTracker_habitLogs', JSON.stringify(demoData));
+    if (!loading && user) {
+      navigate("/dashboard");
     }
-  }, []);
+  }, [user, loading, navigate]);
 
-  const handleLogHabit = (habitId: string, date: string, notes?: string) => {
-    // Check if habit already logged for this date
-    const existingLog = habitLogs.find(log => log.habit_type === habitId && log.date === date);
-    if (existingLog) {
-      toast({
-        title: "Already logged",
-        description: "You've already logged this habit for this date.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const habit = HABIT_TYPES.find(h => h.id === habitId);
-    if (!habit) return;
-
-    const newLog: HabitLog = {
-      id: `${Date.now()}-${habitId}`,
-      user_id: 'current-user',
-      habit_type: habitId,
-      co2_saved: habit.co2_saved,
-      date,
-      notes,
-      created_at: new Date()
-    };
-
-    const updatedLogs = [newLog, ...habitLogs];
-    setHabitLogs(updatedLogs);
-    localStorage.setItem('carbonTracker_habitLogs', JSON.stringify(updatedLogs));
-
-    toast({
-      title: "Habit logged! 🌱",
-      description: `Great job! You saved ${habit.co2_saved}kg of CO₂.`,
-    });
-  };
-
-  const handleExportData = () => {
-    const csvContent = [
-      ['Date', 'Habit', 'CO2 Saved (kg)', 'Notes'].join(','),
-      ...habitLogs.map(log => {
-        const habit = HABIT_TYPES.find(h => h.id === log.habit_type);
-        return [
-          log.date,
-          `"${habit?.name || log.habit_type}"`,
-          log.co2_saved,
-          `"${log.notes || ''}"`
-        ].join(',');
-      })
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `carbon-footprint-data-${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    toast({
-      title: "Data exported",
-      description: "Your habit data has been exported as CSV.",
-    });
-  };
-
-  const handleHabitToggle = (habitId: string) => {
-    setSelectedHabits(prev => 
-      prev.includes(habitId)
-        ? prev.filter(id => id !== habitId)
-        : [...prev, habitId]
-    );
-  };
-
-  // Home page component
-  const HomePage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <main className="container mx-auto px-4 py-12">
-        <HabitSelector 
-          selectedHabits={selectedHabits}
-          onHabitToggle={handleHabitToggle}
-        />
-      </main>
-    </div>
-  );
-
-  // Dashboard page component  
-  const DashboardPage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="stats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:w-[400px]">
-            <TabsTrigger value="stats" className="flex items-center space-x-2">
-              <BarChart3 className="w-4 h-4" />
-              <span>Statistics</span>
-            </TabsTrigger>
-            <TabsTrigger value="logger" className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4" />
-              <span>Log Habits</span>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="stats" className="space-y-6">
-            <StatsCards habitLogs={habitLogs} />
-            <ProgressChart habitLogs={habitLogs} />
-          </TabsContent>
-
-          <TabsContent value="logger">
-            <DailyLogger 
-              habitLogs={habitLogs} 
-              onLogHabit={handleLogHabit}
-            />
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
-  );
-
-  // Placeholder pages
-  const PlaceholderPage = ({ title }: { title: string }) => (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <main className="container mx-auto px-4 py-12">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
-          <p className="text-muted-foreground">Coming soon...</p>
+  if (loading) {
+    return (
+      <div className="min-h-screen gradient-primary flex items-center justify-center">
+        <div className="text-center text-white">
+          <div className="w-16 h-16 gradient-success rounded-full flex items-center justify-center mx-auto mb-4">
+            <Leaf className="w-8 h-8 animate-pulse" />
+          </div>
+          <p>Loading...</p>
         </div>
-      </main>
-    </div>
-  );
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Header />
-      <div className="flex-1">
-        <HomePage />
+      <div className="min-h-screen gradient-primary">
+        <main className="container mx-auto px-4 pt-24 pb-16">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center justify-center w-16 h-16 gradient-success rounded-full mb-6">
+              <Leaf className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Track Your Carbon Impact
+            </h1>
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+              Make sustainable choices every day and watch your positive environmental impact grow with our comprehensive carbon footprint tracker.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90"
+                onClick={() => navigate(user ? "/dashboard" : "/auth")}
+              >
+                {user ? "Go to Dashboard" : "Start Tracking Today"}
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/10"
+                onClick={() => navigate("/about")}
+              >
+                Learn More
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <Card className="bg-white/10 border-white/20 text-white">
+              <CardHeader>
+                <TrendingUp className="w-8 h-8 mb-2" />
+                <CardTitle>Track Progress</CardTitle>
+                <CardDescription className="text-white/80">
+                  Monitor your daily sustainable habits and see your environmental impact grow over time.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="bg-white/10 border-white/20 text-white">
+              <CardHeader>
+                <Target className="w-8 h-8 mb-2" />
+                <CardTitle>Set Goals</CardTitle>
+                <CardDescription className="text-white/80">
+                  Create personal targets for CO₂ reduction and work towards a more sustainable lifestyle.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="bg-white/10 border-white/20 text-white">
+              <CardHeader>
+                <Users className="w-8 h-8 mb-2" />
+                <CardTitle>Join Community</CardTitle>
+                <CardDescription className="text-white/80">
+                  Connect with like-minded individuals and share your journey towards sustainability.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+
+          {!user && (
+            <div className="text-center">
+              <Card className="bg-white/10 border-white/20 text-white max-w-md mx-auto">
+                <CardHeader>
+                  <CardTitle>Ready to get started?</CardTitle>
+                  <CardDescription className="text-white/80">
+                    Create your free account and start tracking your sustainable habits today.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button 
+                    onClick={() => navigate("/auth")}
+                    className="w-full bg-white text-primary hover:bg-white/90"
+                  >
+                    Sign Up Now
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </main>
       </div>
       <Footer />
-    </div>
+    </>
   );
-};
-
-export default Index;
+}

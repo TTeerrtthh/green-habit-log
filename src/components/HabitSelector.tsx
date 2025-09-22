@@ -3,7 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Check } from "lucide-react";
-import { HABIT_TYPES, HabitType } from "@/types";
+import { HabitType } from "@/types";
+import { useHabits } from "@/hooks/useHabits";
 
 interface HabitSelectorProps {
   selectedHabits: string[];
@@ -12,11 +13,23 @@ interface HabitSelectorProps {
 
 export function HabitSelector({ selectedHabits, onHabitToggle }: HabitSelectorProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const { habitTypes } = useHabits();
 
-  const filteredHabits = HABIT_TYPES.filter(habit =>
+  const filteredHabits = habitTypes.filter(habit =>
     habit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     habit.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const getIconForHabit = (habitId: string) => {
+    const iconMap: { [key: string]: string } = {
+      'bike-commute': '🚲',
+      'public-transport': '🚌', 
+      'plant-based-meal': '🌱',
+      'reusable-items': '♻️',
+      'energy-conservation': '🔌'
+    };
+    return iconMap[habitId] || '🌍';
+  };
 
   return (
     <div className="space-y-6">
@@ -61,7 +74,7 @@ export function HabitSelector({ selectedHabits, onHabitToggle }: HabitSelectorPr
             >
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="text-2xl">{habit.icon}</div>
+                  <div className="text-2xl">{getIconForHabit(habit.id)}</div>
                   {isSelected && (
                     <div className="w-6 h-6 bg-success rounded-full flex items-center justify-center">
                       <Check className="w-4 h-4 text-white" />

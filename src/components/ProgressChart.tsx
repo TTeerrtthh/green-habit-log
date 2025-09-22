@@ -1,12 +1,15 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { HabitLog, HABIT_TYPES } from "@/types";
+import { HabitLog, HabitType } from "@/types";
+import { useHabits } from "@/hooks/useHabits";
 
 interface ProgressChartProps {
   habitLogs: HabitLog[];
 }
 
 export function ProgressChart({ habitLogs }: ProgressChartProps) {
+  const { habitTypes } = useHabits();
+
   // Process data for cumulative CO₂ savings over time
   const processTimelineData = () => {
     const sortedLogs = [...habitLogs].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -36,8 +39,8 @@ export function ProgressChart({ habitLogs }: ProgressChartProps) {
 
   // Process data for habit frequency
   const processHabitFrequency = () => {
-    const frequency = HABIT_TYPES.map(habit => {
-      const count = habitLogs.filter(log => log.habit_type === habit.id).length;
+    const frequency = habitTypes.map(habit => {
+      const count = habitLogs.filter(log => log.habit_id === habit.id).length;
       return {
         name: habit.name.split(' ').slice(0, 2).join(' '), // Shortened names
         count,
