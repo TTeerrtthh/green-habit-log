@@ -7,8 +7,7 @@ import { CalendarIcon, Leaf } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { HabitCard } from "./HabitCard";
-import { HabitLog, HabitType } from "@/types";
-import { useHabits } from "@/hooks/useHabits";
+import { HABIT_TYPES, HabitLog } from "@/types";
 
 interface DailyLoggerProps {
   habitLogs: HabitLog[];
@@ -17,13 +16,12 @@ interface DailyLoggerProps {
 
 export function DailyLogger({ habitLogs, onLogHabit }: DailyLoggerProps) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const { habitTypes } = useHabits();
   const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
 
   // Get habits already logged for selected date
   const loggedHabits = habitLogs
     .filter(log => log.date === selectedDateStr)
-    .map(log => log.habit_id);
+    .map(log => log.habit_type);
 
   const handleLogHabit = (habitId: string, notes?: string) => {
     onLogHabit(habitId, selectedDateStr, notes);
@@ -94,7 +92,7 @@ export function DailyLogger({ habitLogs, onLogHabit }: DailyLoggerProps) {
 
       {/* Habit Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {habitTypes.map(habit => (
+        {HABIT_TYPES.map(habit => (
           <HabitCard
             key={habit.id}
             habit={habit}
