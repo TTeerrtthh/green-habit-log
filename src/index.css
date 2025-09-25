@@ -167,6 +167,21 @@
   .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  /* Loading animation */
+  .logo-spin {
+    animation: logoSpin 2s linear infinite;
+  }
+
+  /* Tree growth animations */
+  .tree-grow {
+    animation: treeGrow 0.8s ease-out forwards;
+  }
+
+  /* Reward celebration */
+  .celebrate {
+    animation: celebrate 0.6s ease-in-out;
+  }
 }
 
 @layer components {
@@ -179,6 +194,35 @@
   @keyframes grow {
     0% { transform: scale(0.95); }
     100% { transform: scale(1.05); }
+  }
+
+  @keyframes logoSpin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes treeGrow {
+    from {
+      transform: scale(0.8) translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes celebrate {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
   }
 
   /* Progress bar animation */
