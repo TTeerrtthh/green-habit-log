@@ -25,69 +25,85 @@ export function HabitCard({ habit, isLogged, onLog, disabled }: HabitCardProps) 
   };
 
   return (
-    <Card className={cn(
-      "habit-card cursor-pointer transition-all duration-300",
-      isLogged && "bg-success/10 border-success/30",
+    <div className={cn(
+      "flip-card h-48 w-full",
       disabled && "opacity-50 cursor-not-allowed"
     )}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <span className="text-2xl">{habit.icon}</span>
-            <div>
-              <h3 className="font-semibold text-sm">{habit.name}</h3>
-              <p className="text-xs text-muted-foreground">{habit.description}</p>
+      <div className="flip-card-inner">
+        {/* Front of card */}
+        <div className="flip-card-front p-6 text-white flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <span className="text-3xl drop-shadow-lg">{habit.icon}</span>
+              <div>
+                <h3 className="font-bold text-lg">{habit.name}</h3>
+                <p className="text-sm opacity-90">{habit.description}</p>
+              </div>
             </div>
           </div>
-          <Badge variant="secondary" className="bg-success/20 text-success">
-            {habit.co2_saved}kg CO₂
-          </Badge>
-        </div>
-      </CardHeader>
-      
-      <CardContent className="pt-0">
-        {!isLogged && !disabled ? (
-          <div className="space-y-3">
-            {showNotes && (
-              <Textarea
-                placeholder="Optional notes about this habit..."
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="min-h-[60px] text-sm"
-              />
+          <div className="flex justify-between items-end">
+            <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+              {habit.co2_saved}kg CO₂
+            </Badge>
+            {isLogged && (
+              <div className="flex items-center space-x-2">
+                <Check className="w-5 h-5" />
+                <span className="text-sm font-medium">Logged</span>
+              </div>
             )}
-            
-            <div className="flex gap-2">
-              <Button
-                onClick={handleSubmit}
-                size="sm"
-                className="flex-1 gradient-success text-white border-0"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Log Habit
-              </Button>
-              
-              {!showNotes && (
-                <Button
-                  onClick={() => setShowNotes(true)}
-                  variant="outline"
-                  size="sm"
-                  className="px-3"
-                >
-                  Add Note
-                </Button>
+          </div>
+        </div>
+
+        {/* Back of card */}
+        <div className="flip-card-back p-6 text-white flex flex-col justify-center">
+          {!isLogged && !disabled ? (
+            <div className="space-y-4">
+              {showNotes && (
+                <Textarea
+                  placeholder="Optional notes about this habit..."
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="min-h-[80px] text-sm bg-white/20 border-white/30 text-white placeholder:text-white/70"
+                />
               )}
+              
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleSubmit}
+                  size="sm"
+                  className="flex-1 btn-vibrant text-white border-0 font-semibold"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Log Habit
+                </Button>
+                
+                {!showNotes && (
+                  <Button
+                    onClick={() => setShowNotes(true)}
+                    variant="outline"
+                    size="sm"
+                    className="px-3 bg-white/20 border-white/30 text-white hover:bg-white/30"
+                  >
+                    Add Note
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        ) : isLogged ? (
-          <div className="flex items-center justify-center py-2">
-            <div className="flex items-center space-x-2 text-success">
-              <Check className="w-4 h-4" />
-              <span className="text-sm font-medium">Logged Today</span>
+          ) : isLogged ? (
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+                <Check className="w-8 h-8" />
+              </div>
+              <span className="text-lg font-bold">Completed!</span>
+              <span className="text-sm opacity-90">Great job on your eco habit</span>
             </div>
-          </div>
-        ) : null}
-      </CardContent>
-    </Card>
+          ) : (
+            <div className="flex items-center justify-center">
+              <span className="text-lg font-semibold">Hover to interact</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

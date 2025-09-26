@@ -31,7 +31,7 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
               <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
                 Sign In
               </Button>
-              <Button onClick={onGetStarted} className="bg-success hover:bg-success/90 text-white px-6">
+              <Button onClick={onGetStarted} variant="vibrant" className="px-6">
                 Get Started
               </Button>
             </div>
@@ -61,14 +61,15 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                 <Button 
                   onClick={onGetStarted}
                   size="lg" 
-                  className="bg-success hover:bg-success/90 text-white px-8 py-3 text-lg"
+                  variant="glow"
+                  className="px-8 py-3 text-lg"
                 >
                   Get Started
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="border-success text-success hover:bg-success hover:text-white px-8 py-3 text-lg"
+                  className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 text-lg glow-effect"
                 >
                   Learn More
                 </Button>
@@ -232,7 +233,8 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             <Button 
               onClick={onGetStarted}
               size="lg"
-              className="bg-white text-success hover:bg-white/90 px-12 py-4 text-xl font-semibold rounded-full"
+              variant="glow"
+              className="px-12 py-4 text-xl font-semibold rounded-full"
             >
               Start Your Impact Journey
             </Button>

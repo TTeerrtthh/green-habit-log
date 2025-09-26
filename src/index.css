@@ -18,10 +18,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 140 15% 15%;
 
-    /* Primary - Deep forest green */
-    --primary: 140 60% 25%;
+    /* Primary - Vibrant lime to forest green */
+    --primary: 85 70% 55%;
     --primary-foreground: 0 0% 98%;
-    --primary-glow: 140 70% 35%;
+    --primary-glow: 120 65% 45%;
+    --primary-deep: 140 60% 35%;
 
     /* Secondary - Soft sage green */
     --secondary: 120 25% 85%;
@@ -52,11 +53,15 @@
     --input: 120 20% 90%;
     --ring: 140 60% 25%;
 
-    /* Custom eco gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    /* Custom vibrant eco gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(85 75% 60%), hsl(120 65% 45%));
+    --gradient-primary-reverse: linear-gradient(135deg, hsl(120 65% 45%), hsl(85 75% 60%));
+    --gradient-vibrant: linear-gradient(145deg, hsl(85 80% 65%), hsl(140 60% 35%));
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(110 70% 60%));
     --gradient-nature: linear-gradient(135deg, hsl(120 40% 75%), hsl(140 50% 65%));
     --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(120 25% 95%));
+    --gradient-card: linear-gradient(145deg, hsl(85 75% 60%) 0%, hsl(120 65% 45%) 100%);
+    --gradient-card-hover: linear-gradient(145deg, hsl(120 65% 45%) 0%, hsl(85 75% 60%) 100%);
 
     /* Shadows with green tints */
     --shadow-soft: 0 4px 20px -2px hsl(120 30% 70% / 0.1);
@@ -230,13 +235,74 @@
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Habit card hover effects */
-  .habit-card {
+  /* Double-faced card hover effects */
+  .flip-card {
+    perspective: 1000px;
     transition: var(--transition-smooth);
   }
 
-  .habit-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-eco-medium);
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 0.75rem;
+  }
+
+  .flip-card-front {
+    background: var(--gradient-card);
+  }
+
+  .flip-card-back {
+    background: var(--gradient-card-hover);
+    transform: rotateY(180deg);
+  }
+
+  /* Vibrant button styles */
+  .btn-vibrant {
+    background: var(--gradient-vibrant);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px hsl(85 75% 60% / 0.3);
+  }
+
+  .btn-vibrant:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px hsl(85 75% 60% / 0.4);
+    background: var(--gradient-primary-reverse);
+  }
+
+  /* Glowing effect for interactive elements */
+  .glow-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glow-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(85 75% 60% / 0.3), transparent);
+    transition: left 0.6s;
+  }
+
+  .glow-effect:hover::before {
+    left: 100%;
   }
 }

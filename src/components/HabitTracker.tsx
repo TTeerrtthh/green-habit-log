@@ -222,38 +222,56 @@ export const HabitTracker = () => {
                   <Card
                     key={habit.id}
                     className={`
-                      habit-card cursor-pointer border-2 transition-all
+                      flip-card h-32 cursor-pointer border-2 transition-all
                       ${isCompleted 
-                        ? 'bg-success/5 border-success shadow-eco-glow cursor-not-allowed' 
+                        ? 'cursor-not-allowed' 
                         : isSelected 
-                        ? 'bg-primary/5 border-primary shadow-eco-medium' 
+                        ? 'border-primary shadow-eco-medium' 
                         : 'border-border hover:border-primary/50'
                       }
                     `}
                     onClick={() => !isCompleted && setSelectedHabit(isSelected ? null : habit.id)}
                   >
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-start justify-between">
-                        <div className="text-2xl">{habit.icon}</div>
-                        {isCompleted && (
-                          <CheckCircle className="h-5 w-5 text-success" />
+                    <div className="flip-card-inner">
+                      {/* Front of card */}
+                      <div className={`flip-card-front p-4 text-white flex flex-col justify-between ${isCompleted ? 'opacity-50' : ''}`}>
+                        <div className="flex items-start justify-between">
+                          <div className="text-2xl drop-shadow-lg">{habit.icon}</div>
+                          {isCompleted && (
+                            <CheckCircle className="h-5 w-5 text-white" />
+                          )}
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <h3 className="font-bold text-sm leading-tight">{habit.name}</h3>
+                          <p className="text-xs opacity-90">{habit.description}</p>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs">
+                            {habit.category}
+                          </Badge>
+                          <span className="text-xs font-bold text-white">
+                            {habit.co2_saved}kg CO₂
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Back of card */}
+                      <div className="flip-card-back p-4 text-white flex flex-col justify-center">
+                        {isCompleted ? (
+                          <div className="flex flex-col items-center justify-center space-y-2">
+                            <CheckCircle className="w-8 h-8" />
+                            <span className="text-sm font-bold">Completed!</span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center space-y-2">
+                            <span className="text-lg font-bold">Click to Select</span>
+                            <span className="text-xs opacity-90">Save {habit.co2_saved}kg CO₂</span>
+                          </div>
                         )}
                       </div>
-                      
-                      <div className="space-y-1">
-                        <h3 className="font-medium text-sm leading-tight">{habit.name}</h3>
-                        <p className="text-xs text-muted-foreground">{habit.description}</p>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <Badge variant="outline" className="text-xs">
-                          {habit.category}
-                        </Badge>
-                        <span className="text-xs font-medium text-success">
-                          {habit.co2_saved}kg CO₂
-                        </span>
-                      </div>
-                    </CardContent>
+                    </div>
                   </Card>
                 );
               })}
@@ -276,7 +294,8 @@ export const HabitTracker = () => {
                   <Button 
                     onClick={logHabit}
                     disabled={loading}
-                    className="gradient-primary text-white"
+                    variant="vibrant"
+                    className="text-white"
                   >
                     {loading ? "Logging..." : "Log Habit"}
                   </Button>
