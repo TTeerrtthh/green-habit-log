@@ -212,8 +212,20 @@ export const HabitTracker = () => {
             <CardTitle>Log Today's Habits</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Habit Selection */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Habit Selection */}
+            <div className="space-y-4">
+              {/* Category Filters */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Badge variant="outline" className="cursor-pointer">All Categories</Badge>
+                <Badge variant="outline" className="cursor-pointer">🚌 Transport</Badge>
+                <Badge variant="outline" className="cursor-pointer">⚡ Energy</Badge>
+                <Badge variant="outline" className="cursor-pointer">🥗 Food</Badge>
+                <Badge variant="outline" className="cursor-pointer">♻️ Consumption</Badge>
+                <Badge variant="outline" className="cursor-pointer">🚿 Water</Badge>
+                <Badge variant="outline" className="cursor-pointer">🗂️ Waste</Badge>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {habitTypes.map(habit => {
                 const isCompleted = completedHabitIds.includes(habit.id);
                 const isSelected = selectedHabit === habit.id;
@@ -275,6 +287,7 @@ export const HabitTracker = () => {
                   </Card>
                 );
               })}
+              </div>
             </div>
 
             {/* Notes and Submit */}

@@ -46,14 +46,14 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             <div className="space-y-8">
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                  Track Your{' '}
-                  <span className="text-success">Carbon Impact</span>
+                  Track Your Carbon Impact,{' '}
+                  <span className="text-success">Grow Your Green Habits</span>
                 </h1>
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-                  Track <span className="text-success font-medium">sustainable habits</span>, measure real{' '}
-                  <span className="text-success font-medium">impact</span>, and join a{' '}
-                  <span className="text-success font-medium">community</span> of change-makers. Making a{' '}
-                  <span className="text-primary font-medium">measurable difference</span> for our planet starts with a single step.
+                  Join thousands reducing CO₂ emissions through daily habit tracking. Track{' '}
+                  <span className="text-success font-medium">sustainable habits</span>, measure real{' '}
+                  <span className="text-success font-medium">impact</span>, and build{' '}
+                  <span className="text-primary font-medium">lasting change</span> for our planet.
                 </p>
               </div>
               
@@ -64,7 +64,7 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                   variant="glow"
                   className="px-8 py-3 text-lg"
                 >
-                  Get Started
+                  Start Tracking Today
                 </Button>
                 <Button 
                   variant="outline" 
