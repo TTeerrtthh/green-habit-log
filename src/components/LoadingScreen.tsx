@@ -20,13 +20,18 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center bg-gradient-eco transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-0'}`}>
       <div className="flex flex-col items-center space-y-6">
-        <div className="relative">
-          <img 
-            src={ecoLogo} 
-            alt="eCO₂ Tracker Logo" 
-            className="w-24 h-24 logo-spin"
-          />
-          <div className="absolute inset-0 bg-white/20 rounded-full blur-md logo-spin" />
+        <div className="relative flex items-center justify-center w-32 h-32">
+          {/* Stationary footprint icon */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <img 
+              src={ecoLogo} 
+              alt="eCO₂ Tracker Logo" 
+              className="w-16 h-16"
+            />
+          </div>
+          {/* Rotating ring */}
+          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white/60 border-r-white/40 animate-spin" />
+          <div className="absolute inset-2 rounded-full border-2 border-transparent border-b-white/30 border-l-white/20 animate-spin" style={{ animationDirection: 'reverse', animationDuration: '3s' }} />
         </div>
         
         <div className="text-center">
