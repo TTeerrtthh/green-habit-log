@@ -8,12 +8,12 @@ import { Dashboard } from '@/components/Dashboard';
 import { GreenInsights } from '@/components/GreenInsights';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
-import { LogOut, Leaf, Target, BarChart3, Lightbulb, Home } from 'lucide-react';
+import { LogOut, Leaf, Target, BarChart3, Home } from 'lucide-react';
 
 function AppContent() {
   const [showLoading, setShowLoading] = useState(true);
   const [showHero, setShowHero] = useState(false);
-  const [currentView, setCurrentView] = useState<'habits' | 'dashboard' | 'insights'>('habits');
+  const [currentView, setCurrentView] = useState<'home' | 'habits' | 'dashboard'>('home');
   const { user, loading: authLoading, signOut } = useAuth();
 
   useEffect(() => {
@@ -25,7 +25,21 @@ function AppContent() {
   }, [showLoading, user, authLoading]);
 
   const handleLoadingComplete = () => setShowLoading(false);
-  const handleGetStarted = () => setShowHero(false);
+  const handleGetStarted = () => {
+    setShowHero(false);
+    setCurrentView('habits');
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToHowItWorks = () => {
+    const element = document.getElementById('how-it-works');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   if (showLoading) return <LoadingScreen onComplete={handleLoadingComplete} />;
   if (authLoading) return (
@@ -36,8 +50,10 @@ function AppContent() {
       </div>
     </div>
   );
-  if (showHero) return <HeroSection onGetStarted={handleGetStarted} />;
-  if (!user) return <Auth />;
+  if (!user) {
+    if (showHero) return <HeroSection onGetStarted={handleGetStarted} />;
+    return <Auth />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
@@ -55,8 +71,22 @@ function AppContent() {
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
               <Button 
+                variant={currentView === 'home' ? 'default' : 'ghost'}
+                onClick={() => {
+                  setCurrentView('home');
+                  scrollToTop();
+                }}
+                className="gap-2"
+              >
+                <Home className="h-4 w-4" />
+                Home
+              </Button>
+              <Button 
                 variant={currentView === 'habits' ? 'default' : 'ghost'}
-                onClick={() => setCurrentView('habits')}
+                onClick={() => {
+                  setCurrentView('home');
+                  setTimeout(scrollToHowItWorks, 100);
+                }}
                 className="gap-2"
               >
                 <Target className="h-4 w-4" />
@@ -70,14 +100,6 @@ function AppContent() {
                 <BarChart3 className="h-4 w-4" />
                 Dashboard
               </Button>
-              <Button 
-                variant={currentView === 'insights' ? 'default' : 'ghost'}
-                onClick={() => setCurrentView('insights')}
-                className="gap-2"
-              >
-                <Lightbulb className="h-4 w-4" />
-                Green Insights
-              </Button>
             </nav>
 
             <Button variant="ghost" onClick={signOut} className="text-muted-foreground hover:text-foreground">
@@ -90,8 +112,23 @@ function AppContent() {
           <div className="md:hidden mt-4">
             <div className="flex items-center justify-center space-x-2">
               <Button 
+                variant={currentView === 'home' ? 'default' : 'ghost'}
+                onClick={() => {
+                  setCurrentView('home');
+                  scrollToTop();
+                }}
+                size="sm"
+                className="gap-1"
+              >
+                <Home className="h-3 w-3" />
+                Home
+              </Button>
+              <Button 
                 variant={currentView === 'habits' ? 'default' : 'ghost'}
-                onClick={() => setCurrentView('habits')}
+                onClick={() => {
+                  setCurrentView('home');
+                  setTimeout(scrollToHowItWorks, 100);
+                }}
                 size="sm"
                 className="gap-1"
               >
@@ -107,23 +144,29 @@ function AppContent() {
                 <BarChart3 className="h-3 w-3" />
                 Dashboard
               </Button>
-              <Button 
-                variant={currentView === 'insights' ? 'default' : 'ghost'}
-                onClick={() => setCurrentView('insights')}
-                size="sm"
-                className="gap-1"
-              >
-                <Lightbulb className="h-3 w-3" />
-                Insights
-              </Button>
             </div>
           </div>
         </div>
       </header>
-      <main className="container mx-auto px-4 py-8">
-        {currentView === 'habits' && <HabitTracker />}
-        {currentView === 'dashboard' && <Dashboard />}
-        {currentView === 'insights' && <GreenInsights />}
+      <main>
+        {currentView === 'home' && (
+          <>
+            <HeroSection onGetStarted={() => setCurrentView('habits')} />
+            <div className="container mx-auto px-4 py-16">
+              <GreenInsights />
+            </div>
+          </>
+        )}
+        {currentView === 'habits' && (
+          <div className="container mx-auto px-4 py-8">
+            <HabitTracker />
+          </div>
+        )}
+        {currentView === 'dashboard' && (
+          <div className="container mx-auto px-4 py-8">
+            <Dashboard />
+          </div>
+        )}
       </main>
       <Toaster />
     </div>

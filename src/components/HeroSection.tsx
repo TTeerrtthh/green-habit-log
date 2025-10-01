@@ -115,7 +115,7 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-muted/30">
+      <section id="how-it-works" className="py-20 bg-muted/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-success">

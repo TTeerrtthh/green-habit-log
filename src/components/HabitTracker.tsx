@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { RewardDisplay } from './RewardDisplay';
 import { useRewards } from '@/hooks/useRewards';
 import { CheckCircle, Calendar, Leaf } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface HabitType {
   id: string;
@@ -31,9 +32,10 @@ interface HabitLog {
 export const HabitTracker = () => {
   const [habitTypes, setHabitTypes] = useState<HabitType[]>([]);
   const [todayLogs, setTodayLogs] = useState<HabitLog[]>([]);
-  const [selectedHabit, setSelectedHabit] = useState<string | null>(null);
+  const [selectedHabits, setSelectedHabits] = useState<Set<string>>(new Set());
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const { user } = useAuth();
   const { toast } = useToast();
   const { rewards, earnReward, getWeekProgress, canEarnReward } = useRewards();
@@ -77,63 +79,79 @@ export const HabitTracker = () => {
     }
   };
 
-  const logHabit = async () => {
-    if (!user || !selectedHabit) return;
+  const logHabits = async () => {
+    if (!user || selectedHabits.size === 0) return;
 
     setLoading(true);
     try {
-      const habitType = habitTypes.find(h => h.id === selectedHabit);
-      if (!habitType) return;
+      const habitsToLog = Array.from(selectedHabits).filter(habitId => {
+        const existingLog = todayLogs.find(log => log.habit_id === habitId);
+        return !existingLog;
+      });
 
-      // Check if habit already logged today
-      const existingLog = todayLogs.find(log => log.habit_id === selectedHabit);
-      if (existingLog) {
+      if (habitsToLog.length === 0) {
         toast({
           title: "Already logged",
-          description: "You've already logged this habit today!",
+          description: "All selected habits have already been logged today!",
           variant: "destructive",
         });
+        setLoading(false);
         return;
       }
 
-      const { data, error } = await supabase
-        .from('habit_logs')
-        .insert({
+      const logsToInsert = habitsToLog.map(habitId => {
+        const habitType = habitTypes.find(h => h.id === habitId);
+        return {
           user_id: user.id,
-          habit_id: selectedHabit,
-          co2_saved: habitType.co2_saved,
+          habit_id: habitId,
+          co2_saved: habitType?.co2_saved || 0,
           date: today,
           notes: notes.trim() || null,
-        })
-        .select()
-        .single();
+        };
+      });
+
+      const { data, error } = await supabase
+        .from('habit_logs')
+        .insert(logsToInsert)
+        .select();
 
       if (error) throw error;
 
-      setTodayLogs(prev => [...prev, data]);
-      setSelectedHabit(null);
+      setTodayLogs(prev => [...prev, ...data]);
+      setSelectedHabits(new Set());
       setNotes('');
 
       // Check if user can earn reward
-      const newLogCount = todayLogs.length + 1;
+      const newLogCount = todayLogs.length + data.length;
       if (canEarnReward(currentDayOfWeek, newLogCount)) {
         await earnReward(currentDayOfWeek);
       }
 
+      const totalCO2 = data.reduce((sum, log) => sum + log.co2_saved, 0);
       toast({
-        title: "Habit logged! 🌱",
-        description: `Great job! You saved ${habitType.co2_saved}kg of CO₂ today.`,
+        title: "Habits logged! 🌱",
+        description: `Great job! You saved ${totalCO2.toFixed(1)}kg of CO₂ today.`,
       });
     } catch (error) {
-      console.error('Error logging habit:', error);
+      console.error('Error logging habits:', error);
       toast({
         title: "Error",
-        description: "Failed to log habit. Please try again.",
+        description: "Failed to log habits. Please try again.",
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleHabitSelection = (habitId: string) => {
+    const newSelection = new Set(selectedHabits);
+    if (newSelection.has(habitId)) {
+      newSelection.delete(habitId);
+    } else {
+      newSelection.add(habitId);
+    }
+    setSelectedHabits(newSelection);
   };
 
   const getTotalCO2Saved = () => {
@@ -142,6 +160,20 @@ export const HabitTracker = () => {
 
   const progress = getWeekProgress();
   const completedHabitIds = todayLogs.map(log => log.habit_id);
+  
+  const categories = [
+    { id: 'all', label: 'All Categories', icon: '🌍' },
+    { id: 'transport', label: 'Transport', icon: '🚌' },
+    { id: 'energy', label: 'Energy', icon: '⚡' },
+    { id: 'food', label: 'Food', icon: '🥗' },
+    { id: 'consumption', label: 'Consumption', icon: '♻️' },
+    { id: 'water', label: 'Water', icon: '🚿' },
+    { id: 'waste', label: 'Waste', icon: '🗂️' },
+  ];
+
+  const filteredHabits = activeCategory === 'all' 
+    ? habitTypes 
+    : habitTypes.filter(h => h.category === activeCategory);
 
   return (
     <div className="space-y-8">
@@ -212,116 +244,115 @@ export const HabitTracker = () => {
             <CardTitle>Log Today's Habits</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-      {/* Habit Selection */}
-            <div className="space-y-4">
               {/* Category Filters */}
               <div className="flex flex-wrap gap-2 mb-4">
-                <Badge variant="outline" className="cursor-pointer">All Categories</Badge>
-                <Badge variant="outline" className="cursor-pointer">🚌 Transport</Badge>
-                <Badge variant="outline" className="cursor-pointer">⚡ Energy</Badge>
-                <Badge variant="outline" className="cursor-pointer">🥗 Food</Badge>
-                <Badge variant="outline" className="cursor-pointer">♻️ Consumption</Badge>
-                <Badge variant="outline" className="cursor-pointer">🚿 Water</Badge>
-                <Badge variant="outline" className="cursor-pointer">🗂️ Waste</Badge>
+                {categories.map(cat => (
+                  <Badge 
+                    key={cat.id}
+                    variant={activeCategory === cat.id ? "default" : "outline"}
+                    className="cursor-pointer hover:bg-primary/10 transition-colors"
+                    onClick={() => setActiveCategory(cat.id)}
+                  >
+                    {cat.icon} {cat.label}
+                  </Badge>
+                ))}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {habitTypes.map(habit => {
-                const isCompleted = completedHabitIds.includes(habit.id);
-                const isSelected = selectedHabit === habit.id;
-                
-                return (
-                  <Card
-                    key={habit.id}
-                    className={`
-                      flip-card h-32 cursor-pointer border-2 transition-all
-                      ${isCompleted 
-                        ? 'cursor-not-allowed' 
-                        : isSelected 
-                        ? 'border-primary shadow-eco-medium' 
-                        : 'border-border hover:border-primary/50'
-                      }
-                    `}
-                    onClick={() => !isCompleted && setSelectedHabit(isSelected ? null : habit.id)}
-                  >
-                    <div className="flip-card-inner">
-                      {/* Front of card */}
-                      <div className={`flip-card-front p-4 text-white flex flex-col justify-between ${isCompleted ? 'opacity-50' : ''}`}>
-                        <div className="flex items-start justify-between">
-                          <div className="text-2xl drop-shadow-lg">{habit.icon}</div>
+              {/* Habit List with Checkboxes */}
+              <div className="space-y-3">
+                {filteredHabits.map(habit => {
+                  const isCompleted = completedHabitIds.includes(habit.id);
+                  const isSelected = selectedHabits.has(habit.id);
+                  
+                  return (
+                    <Card
+                      key={habit.id}
+                      className={`
+                        p-4 transition-all cursor-pointer
+                        ${isCompleted 
+                          ? 'opacity-50 cursor-not-allowed bg-muted' 
+                          : isSelected 
+                          ? 'border-2 border-primary shadow-eco-medium bg-primary/5' 
+                          : 'border hover:border-primary/50 hover:shadow-eco-soft'
+                        }
+                      `}
+                      onClick={() => !isCompleted && toggleHabitSelection(habit.id)}
+                    >
+                      <div className="flex items-start gap-4">
+                        <Checkbox
+                          checked={isCompleted || isSelected}
+                          disabled={isCompleted}
+                          onCheckedChange={() => !isCompleted && toggleHabitSelection(habit.id)}
+                          className="mt-1"
+                        />
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-center gap-2 flex-1">
+                              <span className="text-2xl">{habit.icon}</span>
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-sm leading-tight">{habit.name}</h3>
+                                <p className="text-xs text-muted-foreground mt-0.5">{habit.description}</p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-col items-end gap-1">
+                              <Badge variant="secondary" className="text-xs whitespace-nowrap">
+                                {habit.category}
+                              </Badge>
+                              <span className="text-xs font-bold text-success whitespace-nowrap">
+                                {habit.co2_saved}kg CO₂
+                              </span>
+                            </div>
+                          </div>
+                          
                           {isCompleted && (
-                            <CheckCircle className="h-5 w-5 text-white" />
+                            <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+                              <CheckCircle className="h-3 w-3" />
+                              <span>Completed today</span>
+                            </div>
                           )}
                         </div>
-                        
-                        <div className="space-y-1">
-                          <h3 className="font-bold text-sm leading-tight">{habit.name}</h3>
-                          <p className="text-xs opacity-90">{habit.description}</p>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs">
-                            {habit.category}
-                          </Badge>
-                          <span className="text-xs font-bold text-white">
-                            {habit.co2_saved}kg CO₂
-                          </span>
-                        </div>
                       </div>
-
-                      {/* Back of card */}
-                      <div className="flip-card-back p-4 text-white flex flex-col justify-center">
-                        {isCompleted ? (
-                          <div className="flex flex-col items-center justify-center space-y-2">
-                            <CheckCircle className="w-8 h-8" />
-                            <span className="text-sm font-bold">Completed!</span>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center space-y-2">
-                            <span className="text-lg font-bold">Click to Select</span>
-                            <span className="text-xs opacity-90">Save {habit.co2_saved}kg CO₂</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
+                    </Card>
+                  );
+                })}
               </div>
-            </div>
 
             {/* Notes and Submit */}
-            {selectedHabit && (
-              <div className="space-y-4 p-4 bg-muted/50 rounded-lg border">
+            {selectedHabits.size > 0 && (
+              <div className="space-y-4 p-4 bg-primary/5 rounded-lg border-2 border-primary/20 mt-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">
+                    {selectedHabits.size} habit{selectedHabits.size > 1 ? 's' : ''} selected
+                  </span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setSelectedHabits(new Set())}
+                  >
+                    Clear
+                  </Button>
+                </div>
+                
                 <div>
                   <label className="text-sm font-medium">Notes (Optional)</label>
                   <Textarea
-                    placeholder="Add any details about this eco-action..."
+                    placeholder="Add any details about these eco-actions..."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     className="mt-1"
                   />
                 </div>
                 
-                <div className="flex gap-3">
-                  <Button 
-                    onClick={logHabit}
-                    disabled={loading}
-                    variant="vibrant"
-                    className="text-white"
-                  >
-                    {loading ? "Logging..." : "Log Habit"}
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    onClick={() => {
-                      setSelectedHabit(null);
-                      setNotes('');
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
+                <Button 
+                  onClick={logHabits}
+                  disabled={loading}
+                  variant="vibrant"
+                  className="w-full text-white"
+                >
+                  {loading ? "Logging..." : `Log ${selectedHabits.size} Habit${selectedHabits.size > 1 ? 's' : ''}`}
+                </Button>
               </div>
             )}
           </CardContent>
