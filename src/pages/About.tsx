@@ -47,7 +47,7 @@ export const About = () => {
               Chemistry-Based
             </Badge>
             <Badge className="bg-accent/20 text-accent px-4 py-2">
-              <Molecule className="w-4 h-4 mr-2" />
+              <Atom className="w-4 h-4 mr-2" />
               Real-World Data
             </Badge>
           </div>
