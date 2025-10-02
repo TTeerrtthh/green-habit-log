@@ -10,35 +10,6 @@ interface HeroSectionProps {
 export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <Leaf className="h-8 w-8 text-success" />
-              <span className="text-xl font-bold text-success">eCO Tracker</span>
-            </div>
-            
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-success font-medium hover:text-success/80 transition-colors">Home</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Track Habits</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Green Insights</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">About</a>
-            </nav>
-
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                Sign In
-              </Button>
-              <Button onClick={onGetStarted} variant="vibrant" className="px-6">
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="py-20 bg-gradient-subtle">
         <div className="container mx-auto px-4">
