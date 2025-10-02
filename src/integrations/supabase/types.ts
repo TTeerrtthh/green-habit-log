@@ -109,6 +109,63 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          action_count: number
+          action_type: string
+          created_at: string
+          id: string
+          user_id: string
+          window_start: string
+        }
+        Insert: {
+          action_count?: number
+          action_type: string
+          created_at?: string
+          id?: string
+          user_id: string
+          window_start?: string
+        }
+        Update: {
+          action_count?: number
+          action_type?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
+      security_events: {
+        Row: {
+          created_at: string
+          event_details: Json | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_details?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_details?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_rewards: {
         Row: {
           created_at: string
@@ -141,10 +198,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      leaderboard_stats: {
+        Row: {
+          display_name: string | null
+          rank: number | null
+          total_co2_saved: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      check_rate_limit: {
+        Args: {
+          _action_type: string
+          _max_actions: number
+          _user_id: string
+          _window_minutes?: number
+        }
+        Returns: boolean
+      }
+      get_leaderboard_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          display_name: string
+          rank: number
+          total_co2_saved: number
+          user_id: string
+        }[]
+      }
+      log_security_event: {
+        Args: {
+          _event_details?: Json
+          _event_type: string
+          _ip_address?: string
+          _user_agent?: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
