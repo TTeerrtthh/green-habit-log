@@ -71,17 +71,6 @@ function AppContent() {
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
               <Button 
-                variant={currentView === 'home' ? 'default' : 'ghost'}
-                onClick={() => {
-                  setCurrentView('home');
-                  scrollToTop();
-                }}
-                className="gap-2"
-              >
-                <Home className="h-4 w-4" />
-                Home
-              </Button>
-              <Button 
                 variant={currentView === 'habits' ? 'default' : 'ghost'}
                 onClick={() => {
                   setCurrentView('home');
@@ -111,18 +100,6 @@ function AppContent() {
           {/* Mobile Navigation */}
           <div className="md:hidden mt-4">
             <div className="flex items-center justify-center space-x-2">
-              <Button 
-                variant={currentView === 'home' ? 'default' : 'ghost'}
-                onClick={() => {
-                  setCurrentView('home');
-                  scrollToTop();
-                }}
-                size="sm"
-                className="gap-1"
-              >
-                <Home className="h-3 w-3" />
-                Home
-              </Button>
               <Button 
                 variant={currentView === 'habits' ? 'default' : 'ghost'}
                 onClick={() => {

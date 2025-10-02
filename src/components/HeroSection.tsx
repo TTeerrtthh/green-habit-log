@@ -10,40 +10,6 @@ interface HeroSectionProps {
 export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <Leaf className="h-8 w-8 text-success" />
-              <span className="text-xl font-bold text-success">eCO₂ Tracker</span>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                className="text-muted-foreground hover:text-foreground"
-                onClick={() => {
-                  const element = document.getElementById('green-insights');
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-              >
-                Green Insights
-              </Button>
-              <Button 
-                onClick={onGetStarted}
-                variant="default"
-                className="px-6"
-              >
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="py-20 bg-gradient-subtle">
         <div className="container mx-auto px-4">
