@@ -6,14 +6,15 @@ import { Auth } from '@/pages/Auth';
 import { HabitTracker } from '@/components/HabitTracker';
 import { Dashboard } from '@/components/Dashboard';
 import { GreenInsights } from '@/components/GreenInsights';
+import { Leaderboard } from '@/components/Leaderboard';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
-import { LogOut, Leaf, Target, BarChart3, Home } from 'lucide-react';
+import { LogOut, Leaf, Target, BarChart3, Trophy } from 'lucide-react';
 
 function AppContent() {
   const [showLoading, setShowLoading] = useState(true);
   const [showHero, setShowHero] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'habits' | 'dashboard'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'habits' | 'dashboard' | 'leaderboard'>('home');
   const { user, loading: authLoading, signOut } = useAuth();
 
   useEffect(() => {
@@ -89,6 +90,14 @@ function AppContent() {
                 <BarChart3 className="h-4 w-4" />
                 Dashboard
               </Button>
+              <Button 
+                variant={currentView === 'leaderboard' ? 'default' : 'ghost'}
+                onClick={() => setCurrentView('leaderboard')}
+                className="gap-2"
+              >
+                <Trophy className="h-4 w-4" />
+                Leaderboard
+              </Button>
             </nav>
 
             <Button variant="ghost" onClick={signOut} className="text-muted-foreground hover:text-foreground">
@@ -121,6 +130,15 @@ function AppContent() {
                 <BarChart3 className="h-3 w-3" />
                 Dashboard
               </Button>
+              <Button 
+                variant={currentView === 'leaderboard' ? 'default' : 'ghost'}
+                onClick={() => setCurrentView('leaderboard')}
+                size="sm"
+                className="gap-1"
+              >
+                <Trophy className="h-3 w-3" />
+                Board
+              </Button>
             </div>
           </div>
         </div>
@@ -142,6 +160,11 @@ function AppContent() {
         {currentView === 'dashboard' && (
           <div className="container mx-auto px-4 py-8">
             <Dashboard />
+          </div>
+        )}
+        {currentView === 'leaderboard' && (
+          <div className="container mx-auto px-4 py-8">
+            <Leaderboard />
           </div>
         )}
       </main>
