@@ -152,7 +152,7 @@ function AppContent() {
         {currentView === 'home' && (
           <>
             <HeroSection onGetStarted={() => setCurrentView('habits')} />
-            <div className="container mx-auto px-4 py-16">
+            <div id="green-insights" className="container mx-auto px-4 py-16">
               <GreenInsights />
             </div>
           </>
