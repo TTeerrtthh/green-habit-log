@@ -30,42 +30,22 @@ export const Leaderboard = () => {
     try {
       setLoading(true);
 
-      // Get all users with their total CO2 saved
-      const { data: logs, error } = await supabase
-        .from('habit_logs')
-        .select('user_id, co2_saved, profiles(display_name)');
+      // Use the secure database function that prevents PII exposure
+      const { data, error } = await supabase.rpc('get_leaderboard_stats');
 
       if (error) throw error;
 
-      // Aggregate CO2 saved per user
-      const userTotals = logs.reduce((acc: any, log: any) => {
-        const userId = log.user_id;
-        const displayName = log.profiles?.display_name || 'Anonymous';
-        
-        if (!acc[userId]) {
-          acc[userId] = {
-            user_id: userId,
-            display_name: displayName,
-            total_co2_saved: 0,
-          };
-        }
-        
-        acc[userId].total_co2_saved += Number(log.co2_saved);
-        return acc;
-      }, {});
+      const leaderboardData = (data || []).map((entry: any) => ({
+        user_id: entry.user_id,
+        display_name: entry.display_name || 'Anonymous',
+        total_co2_saved: Number(entry.total_co2_saved),
+        rank: Number(entry.rank),
+      }));
 
-      // Convert to array and sort by total CO2 saved
-      const sortedUsers = Object.values(userTotals)
-        .sort((a: any, b: any) => b.total_co2_saved - a.total_co2_saved)
-        .map((user: any, index) => ({
-          ...user,
-          rank: index + 1,
-        }));
-
-      setLeaderboard(sortedUsers);
+      setLeaderboard(leaderboardData);
 
       // Find current user's rank
-      const currentUserRank = sortedUsers.find((u: any) => u.user_id === user.id);
+      const currentUserRank = leaderboardData.find((u: any) => u.user_id === user.id);
       setUserRank(currentUserRank || null);
     } catch (error) {
       console.error('Error fetching leaderboard:', error);

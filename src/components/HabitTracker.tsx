@@ -82,8 +82,41 @@ export const HabitTracker = () => {
   const logHabits = async () => {
     if (!user || selectedHabits.size === 0) return;
 
+    // Validate notes input
+    const trimmedNotes = notes.trim();
+    if (trimmedNotes.length > 500) {
+      toast({
+        title: "Notes too long",
+        description: "Please keep your notes under 500 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
+      // Check rate limit (max 50 habit logs per day)
+      const { data: rateLimitOk, error: rateLimitError } = await supabase
+        .rpc('check_rate_limit', {
+          _user_id: user.id,
+          _action_type: 'habit_log',
+          _max_actions: 50,
+          _window_minutes: 1440 // 24 hours
+        });
+
+      if (rateLimitError) {
+        console.error('Rate limit check error:', rateLimitError);
+        // Continue anyway if rate limit check fails
+      } else if (rateLimitOk === false) {
+        toast({
+          title: "Daily limit reached",
+          description: "You've reached the maximum of 50 habit logs per day. Try again tomorrow!",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const habitsToLog = Array.from(selectedHabits).filter(habitId => {
         const existingLog = todayLogs.find(log => log.habit_id === habitId);
         return !existingLog;
@@ -106,7 +139,7 @@ export const HabitTracker = () => {
           habit_id: habitId,
           co2_saved: habitType?.co2_saved || 0,
           date: today,
-          notes: notes.trim() || null,
+          notes: trimmedNotes || null,
         };
       });
 
@@ -336,12 +369,18 @@ export const HabitTracker = () => {
                 </div>
                 
                 <div>
-                  <label className="text-sm font-medium">Notes (Optional)</label>
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">Notes (Optional)</label>
+                    <span className={`text-xs ${notes.length > 500 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      {notes.length}/500
+                    </span>
+                  </div>
                   <Textarea
                     placeholder="Add any details about these eco-actions..."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     className="mt-1"
+                    maxLength={500}
                   />
                 </div>
                 

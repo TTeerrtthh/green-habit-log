@@ -198,15 +198,7 @@ export type Database = {
       }
     }
     Views: {
-      leaderboard_stats: {
-        Row: {
-          display_name: string | null
-          rank: number | null
-          total_co2_saved: number | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       check_rate_limit: {
