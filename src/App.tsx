@@ -14,7 +14,7 @@ import { LogOut, Leaf, Target, BarChart3, Trophy } from 'lucide-react';
 function AppContent() {
   const [showLoading, setShowLoading] = useState(true);
   const [showHero, setShowHero] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'habits' | 'dashboard' | 'leaderboard'>('home');
+  const [currentView, setCurrentView] = useState<'habits' | 'dashboard' | 'leaderboard'>('habits');
   const { user, loading: authLoading, signOut } = useAuth();
 
   useEffect(() => {
@@ -73,14 +73,11 @@ function AppContent() {
             <nav className="hidden md:flex items-center space-x-6">
               <Button 
                 variant={currentView === 'habits' ? 'default' : 'ghost'}
-                onClick={() => {
-                  setCurrentView('home');
-                  setTimeout(scrollToHowItWorks, 100);
-                }}
+                onClick={() => setCurrentView('habits')}
                 className="gap-2"
               >
                 <Target className="h-4 w-4" />
-                Track Habits
+                Habits
               </Button>
               <Button 
                 variant={currentView === 'dashboard' ? 'default' : 'ghost'}
@@ -111,10 +108,7 @@ function AppContent() {
             <div className="flex items-center justify-center space-x-2">
               <Button 
                 variant={currentView === 'habits' ? 'default' : 'ghost'}
-                onClick={() => {
-                  setCurrentView('home');
-                  setTimeout(scrollToHowItWorks, 100);
-                }}
+                onClick={() => setCurrentView('habits')}
                 size="sm"
                 className="gap-1"
               >
@@ -144,14 +138,6 @@ function AppContent() {
         </div>
       </header>
       <main>
-        {currentView === 'home' && (
-          <>
-            <HeroSection onGetStarted={() => setCurrentView('habits')} />
-            <div id="green-insights" className="container mx-auto px-4 py-16">
-              <GreenInsights />
-            </div>
-          </>
-        )}
         {currentView === 'habits' && (
           <div className="container mx-auto px-4 py-8">
             <HabitTracker />
