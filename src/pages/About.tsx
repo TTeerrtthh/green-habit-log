@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, Car, Zap, Apple, Recycle, Atom, FlaskConical } from 'lucide-react';
+import { ChevronDown, Car, Zap, Apple, Recycle, Atom, FlaskConical, TreePine, Wind, Droplets, Globe } from 'lucide-react';
 import { useState } from 'react';
 
 export const About = () => {
@@ -33,11 +33,9 @@ export const About = () => {
             How We Calculate Your Carbon Impact
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Science-backed methodology using <span className="text-success font-medium">physics</span>,{' '}
-            <span className="text-primary font-medium">chemistry</span>, and{' '}
-            <span className="text-accent font-medium">environmental data</span>
+            From atoms to impact: Understanding the complete journey from molecular reactions to real-world environmental change
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-center space-x-4 flex-wrap gap-2">
             <Badge className="bg-success/20 text-success px-4 py-2">
               <FlaskConical className="w-4 h-4 mr-2" />
               Scientific Accuracy
@@ -47,11 +45,261 @@ export const About = () => {
               Chemistry-Based
             </Badge>
             <Badge className="bg-accent/20 text-accent px-4 py-2">
-              <Atom className="w-4 h-4 mr-2" />
-              Real-World Data
+              <Globe className="w-4 h-4 mr-2" />
+              Real-World Impact
             </Badge>
           </div>
         </div>
+
+        {/* Fundamentals Section */}
+        <Card className="mb-8 shadow-eco-medium bg-gradient-to-br from-primary/10 via-success/10 to-accent/10">
+          <CardHeader>
+            <CardTitle className="text-2xl flex items-center justify-center">
+              <Atom className="w-8 h-8 mr-3 text-primary" />
+              <span className="bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
+                Understanding Carbon from Scratch
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-background/50 p-6 rounded-lg border-2 border-primary/20">
+              <h3 className="text-xl font-semibold mb-4 text-primary">What is Carbon Dioxide?</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0 w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl font-mono font-bold text-primary">CO₂</span>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">
+                      <strong className="text-foreground">One carbon atom (C) + Two oxygen atoms (O₂)</strong> = One molecule of carbon dioxide (CO₂)
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Molecular weight: 12g (carbon) + 32g (oxygen) = <strong className="text-primary">44 grams per mole</strong>
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-destructive/10 to-warning/10 p-4 rounded-lg mt-4">
+                  <p className="text-sm">
+                    <strong>Why it matters:</strong> CO₂ is a greenhouse gas that traps heat in Earth's atmosphere. When we burn fossil fuels, 
+                    cut down forests, or produce goods, we release CO₂ molecules that accumulate in the atmosphere for <strong>hundreds of years</strong>, 
+                    gradually warming our planet.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-background/50 p-6 rounded-lg border-2 border-success/20">
+                <h4 className="text-lg font-semibold mb-3 text-success flex items-center">
+                  <FlaskConical className="w-5 h-5 mr-2" />
+                  The Combustion Reaction
+                </h4>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    When you burn fuel (gasoline, coal, natural gas), you're combining carbon-based molecules with oxygen:
+                  </p>
+                  <div className="bg-gradient-to-r from-success/10 to-primary/10 p-4 rounded text-center">
+                    <span className="font-mono text-lg font-bold text-primary">Fuel + O₂ → CO₂ + H₂O + Energy</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Example:</strong> Burning 1 liter of gasoline releases approximately <strong className="text-destructive">2.31 kg</strong> of CO₂. 
+                    That's because gasoline contains many carbon atoms that all become CO₂ molecules.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-background/50 p-6 rounded-lg border-2 border-accent/20">
+                <h4 className="text-lg font-semibold mb-3 text-accent flex items-center">
+                  <Atom className="w-5 h-5 mr-2" />
+                  Mass Conservation Law
+                </h4>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    The key to calculating CO₂ is understanding that <strong>matter cannot be created or destroyed</strong>—it only transforms.
+                  </p>
+                  <div className="bg-gradient-to-r from-accent/10 to-warning/10 p-3 rounded text-sm">
+                    <p><strong>1 kg of fuel ≠ 1 kg of CO₂</strong></p>
+                    <p className="mt-2">Because fuel combines with oxygen from the air, 1 kg of gasoline actually produces about <strong className="text-destructive">3.2 kg of CO₂</strong></p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    This is why your car's fuel tank empties faster than you might expect in terms of emissions!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-primary/5 to-success/5 p-6 rounded-lg">
+              <h4 className="text-lg font-semibold mb-3 text-primary">How We Calculate Your Impact</h4>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center font-bold text-primary">1</span>
+                  <p className="text-sm"><strong>Identify the activity:</strong> Driving a car, using electricity, eating food, etc.</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center font-bold text-primary">2</span>
+                  <p className="text-sm"><strong>Measure the quantity:</strong> Kilometers driven, kWh used, kg of food consumed</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center font-bold text-primary">3</span>
+                  <p className="text-sm"><strong>Apply emission factor:</strong> Each activity has a scientifically-measured factor (e.g., 0.12 kg CO₂ per km)</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center font-bold text-primary">4</span>
+                  <p className="text-sm"><strong>Calculate total CO₂:</strong> Quantity × Emission Factor = Your carbon footprint</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Real World Impact Section */}
+        <Card className="mb-8 shadow-eco-medium bg-gradient-to-br from-success/10 via-emerald-500/10 to-green-500/10">
+          <CardHeader>
+            <CardTitle className="text-2xl flex items-center justify-center">
+              <Globe className="w-8 h-8 mr-3 text-success" />
+              <span className="bg-gradient-to-r from-success to-emerald-600 bg-clip-text text-transparent">
+                Real World Impact: What Does It Actually Mean?
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-background/50 p-6 rounded-lg border-2 border-success/20">
+              <h3 className="text-xl font-semibold mb-4 text-success">Visualizing Your Savings</h3>
+              <p className="text-muted-foreground mb-4">
+                When you save 1 kg of CO₂, here's what you're actually preventing from entering our atmosphere:
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-4 mt-4">
+                <div className="bg-gradient-to-br from-success/20 to-emerald-500/20 p-4 rounded-lg text-center">
+                  <div className="text-3xl font-bold text-success mb-2">509m³</div>
+                  <p className="text-sm text-muted-foreground">Volume of CO₂ gas at room temperature (enough to fill a small house)</p>
+                </div>
+                <div className="bg-gradient-to-br from-primary/20 to-blue-500/20 p-4 rounded-lg text-center">
+                  <div className="text-3xl font-bold text-primary mb-2">4.5 km</div>
+                  <p className="text-sm text-muted-foreground">Average car driving distance producing 1 kg CO₂</p>
+                </div>
+                <div className="bg-gradient-to-br from-accent/20 to-orange-500/20 p-4 rounded-lg text-center">
+                  <div className="text-3xl font-bold text-accent mb-2">1.2 kWh</div>
+                  <p className="text-sm text-muted-foreground">Electricity from coal plants needed to emit 1 kg CO₂</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-background/50 p-6 rounded-lg border-2 border-emerald-500/20">
+                <h4 className="text-lg font-semibold mb-3 text-success flex items-center">
+                  <TreePine className="w-5 h-5 mr-2" />
+                  Tree Equivalent Impact
+                </h4>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    <strong>1 mature tree absorbs approximately 21 kg of CO₂ per year</strong>
+                  </p>
+                  <div className="bg-gradient-to-r from-success/10 to-emerald-500/10 p-4 rounded-lg space-y-2">
+                    <p className="text-sm">✓ <strong>Save 100 kg CO₂</strong> = Equivalent to planting <strong className="text-success">5 trees</strong> for a year</p>
+                    <p className="text-sm">✓ <strong>Save 500 kg CO₂</strong> = Equivalent to planting <strong className="text-success">24 trees</strong> for a year</p>
+                    <p className="text-sm">✓ <strong>Save 1,000 kg CO₂</strong> = Equivalent to planting <strong className="text-success">48 trees</strong> for a year</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground italic">
+                    Note: Young trees grow faster and absorb more CO₂ initially, while older trees store more carbon long-term.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-background/50 p-6 rounded-lg border-2 border-blue-500/20">
+                <h4 className="text-lg font-semibold mb-3 text-primary flex items-center">
+                  <Wind className="w-5 h-5 mr-2" />
+                  Atmospheric Impact
+                </h4>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    CO₂ stays in the atmosphere for <strong>300-1,000 years</strong>, continually trapping heat.
+                  </p>
+                  <div className="bg-gradient-to-r from-primary/10 to-blue-500/10 p-4 rounded-lg space-y-2">
+                    <p className="text-sm"><strong>Every kg of CO₂ you prevent:</strong></p>
+                    <p className="text-sm">✓ Avoids <strong className="text-primary">0.0005°C</strong> of atmospheric warming (per trillion kg)</p>
+                    <p className="text-sm">✓ Reduces ocean acidification</p>
+                    <p className="text-sm">✓ Helps prevent extreme weather events</p>
+                    <p className="text-sm">✓ Protects coral reefs and ecosystems</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground italic">
+                    Small actions add up: humanity emits ~36 billion tons of CO₂ annually. Every kg matters.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-success/5 to-emerald-500/5 p-6 rounded-lg border-2 border-success/30">
+              <h4 className="text-lg font-semibold mb-4 text-success flex items-center">
+                <Droplets className="w-5 h-5 mr-2" />
+                Tangible Benefits of Your Actions
+              </h4>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h5 className="font-semibold text-foreground">Health Benefits</h5>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>✓ Cleaner air quality in your community</li>
+                    <li>✓ Reduced respiratory illnesses</li>
+                    <li>✓ Lower particulate matter (PM2.5) exposure</li>
+                    <li>✓ Decreased heat-related health risks</li>
+                  </ul>
+                </div>
+                <div className="space-y-3">
+                  <h5 className="font-semibold text-foreground">Economic Benefits</h5>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>✓ Lower energy bills from efficiency</li>
+                    <li>✓ Reduced healthcare costs</li>
+                    <li>✓ Job creation in renewable sector</li>
+                    <li>✓ Avoided climate damage costs</li>
+                  </ul>
+                </div>
+                <div className="space-y-3">
+                  <h5 className="font-semibold text-foreground">Environmental Benefits</h5>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>✓ Preserved biodiversity and habitats</li>
+                    <li>✓ Protected polar ice and glaciers</li>
+                    <li>✓ Healthier oceans and marine life</li>
+                    <li>✓ More stable weather patterns</li>
+                  </ul>
+                </div>
+                <div className="space-y-3">
+                  <h5 className="font-semibold text-foreground">Social Benefits</h5>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>✓ Inspire others through leadership</li>
+                    <li>✓ Support sustainable communities</li>
+                    <li>✓ Preserve resources for future generations</li>
+                    <li>✓ Contribute to global climate goals</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-primary/10 to-success/10 p-6 rounded-lg">
+              <h4 className="text-lg font-semibold mb-3 text-primary">The Compound Effect</h4>
+              <p className="text-muted-foreground mb-4">
+                Your individual actions multiply when others join you:
+              </p>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-background/50 rounded-lg">
+                  <div className="text-2xl font-bold text-success mb-2">1 Person</div>
+                  <p className="text-sm text-muted-foreground">Saves ~500 kg CO₂/year with sustainable habits</p>
+                </div>
+                <div className="text-center p-4 bg-background/50 rounded-lg">
+                  <div className="text-2xl font-bold text-primary mb-2">100 People</div>
+                  <p className="text-sm text-muted-foreground">= 50,000 kg CO₂/year (equivalent to 2,381 trees)</p>
+                </div>
+                <div className="text-center p-4 bg-background/50 rounded-lg">
+                  <div className="text-2xl font-bold text-accent mb-2">1,000 People</div>
+                  <p className="text-sm text-muted-foreground">= 500,000 kg CO₂/year (equivalent to 23,810 trees)</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground mt-4 text-center italic">
+                By tracking your habits and sharing your progress, you become part of a global movement making measurable change.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Transportation Section */}
         <Card className="mb-8 shadow-eco-soft hover:shadow-eco-medium transition-all duration-300">
