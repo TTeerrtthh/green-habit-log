@@ -135,45 +135,45 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
       <section id="home" className="py-20 bg-gradient-subtle relative">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-            <div className="space-y-8">
+            <div className="space-y-8 animate-fade-in">
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-6xl font-bold leading-tight min-h-[200px]">
-                  {typewriterText}
+                  <span className="inline-block hover-scale">{typewriterText}</span>
                   <span className="text-success animate-pulse">|</span>
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
+                <p className="text-xl text-muted-foreground leading-relaxed max-w-lg animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   Join thousands reducing CO₂ emissions through daily habit tracking. Track{' '}
-                  <span className="text-success font-medium">sustainable habits</span>, measure real{' '}
-                  <span className="text-success font-medium">impact</span>, and build{' '}
-                  <span className="text-primary font-medium">lasting change</span> for our planet.
+                  <span className="text-success font-medium story-link">sustainable habits</span>, measure real{' '}
+                  <span className="text-success font-medium story-link">impact</span>, and build{' '}
+                  <span className="text-primary font-medium story-link">lasting change</span> for our planet.
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <Button 
                   onClick={onGetStarted}
                   size="lg" 
                   variant="glow"
-                  className="px-8 py-3 text-lg pulse-effect"
+                  className="px-8 py-3 text-lg pulse-effect hover-scale"
                 >
                   Begin Your Eco Journey Today! 🌱
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 text-lg glow-effect hover:scale-105 transition-all"
+                  className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 text-lg glow-effect hover-scale transition-all"
                 >
                   Learn More
                 </Button>
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <div className="relative group">
                 <img 
                   src={heroIllustration} 
                   alt="People riding bikes in a sustainable environment"
-                  className="w-full h-auto rounded-3xl shadow-eco-strong group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-auto rounded-3xl shadow-eco-strong group-hover:scale-105 transition-transform duration-500 hover-scale"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-success/20 via-transparent to-primary/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
