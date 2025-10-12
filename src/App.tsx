@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { HeroSection } from '@/components/HeroSection';
+import { EnhancedHero } from '@/components/EnhancedHero';
 import { Auth } from '@/pages/Auth';
 import { HabitTracker } from '@/components/HabitTracker';
 import { Dashboard } from '@/components/Dashboard';
@@ -52,7 +52,7 @@ function AppContent() {
     </div>
   );
   if (!user) {
-    if (showHero) return <HeroSection onGetStarted={handleGetStarted} />;
+    if (showHero) return <EnhancedHero onGetStarted={handleGetStarted} />;
     return <Auth />;
   }
 
