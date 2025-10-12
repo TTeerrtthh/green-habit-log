@@ -63,20 +63,60 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
         ))}
       </div>
 
-      {/* Navigation */}
-      <nav className="border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-50">
+      {/* Navigation Header with Quick Links */}
+      <nav className="border-b border-border bg-card/95 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Footprints className="h-8 w-8 text-success" />
               <span className="text-xl font-bold text-success">eCO₂ Tracker</span>
             </div>
             
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#home" className="text-success font-medium hover:text-success/80 transition-colors">Home</a>
-              <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
-              <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">About</a>
-              <a href="#insights" className="text-muted-foreground hover:text-foreground transition-colors">Green Insights</a>
+            <nav className="hidden md:flex items-center space-x-6">
+              <a 
+                href="#home" 
+                className="text-sm font-medium text-success hover:text-success/80 transition-colors flex items-center gap-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Footprints className="h-4 w-4" />
+                Home
+              </a>
+              <a 
+                href="#how-it-works" 
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Target className="h-4 w-4" />
+                How It Works
+              </a>
+              <a 
+                href="#impact" 
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('impact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <BarChart3 className="h-4 w-4" />
+                Real Impact
+              </a>
+              <a 
+                href="#get-started" 
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('get-started')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Zap className="h-4 w-4" />
+                Get Started
+              </a>
             </nav>
 
             <div className="flex items-center space-x-3">
@@ -223,7 +263,7 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
       </section>
 
       {/* Make a Real Difference Section */}
-      <section className="py-20 bg-gradient-to-br from-success/5 to-primary/5">
+      <section id="impact" className="py-20 bg-gradient-to-br from-success/5 to-primary/5">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
@@ -282,7 +322,7 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-success via-primary to-accent relative overflow-hidden">
+      <section id="get-started" className="py-20 bg-gradient-to-br from-success via-primary to-accent relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-blue-500 to-yellow-500 opacity-90" />
         
         <div className="container mx-auto px-4 text-center relative z-10">
