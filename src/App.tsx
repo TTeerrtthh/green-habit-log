@@ -9,6 +9,7 @@ import { GreenInsights } from '@/components/GreenInsights';
 import { Leaderboard } from '@/components/Leaderboard';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
+import { Chatbot } from '@/components/Chatbot';
 import { LogOut, Leaf, Target, BarChart3, Trophy } from 'lucide-react';
 
 function AppContent() {
@@ -155,6 +156,7 @@ function AppContent() {
         )}
       </main>
       <Toaster />
+      <Chatbot />
     </div>
   );
 }
