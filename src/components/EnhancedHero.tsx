@@ -153,15 +153,18 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
                 <Button 
                   onClick={onGetStarted}
                   size="lg" 
-                  variant="glow"
-                  className="px-8 py-3 text-lg pulse-effect hover-scale"
+                  className="bg-success hover:bg-success/90 text-white px-8 py-3 text-lg hover-scale"
                 >
-                  Begin Your Eco Journey Today! 🌱
+                  Start Tracking Today
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 text-lg glow-effect hover-scale transition-all"
+                  className="border-2 border-success text-success hover:bg-success/10 px-8 py-3 text-lg hover-scale transition-all"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
                   Learn More
                 </Button>
@@ -203,8 +206,35 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
         </div>
       </section>
 
+      {/* Understand Your Impact Section */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              <span className="text-success">Understand</span> Your Impact
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Discover the science behind carbon footprint reduction and the power of{' '}
+              <span className="text-success font-medium">collective action</span>.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-eco-strong">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/8q7_aV8eLUE"
+                title="What is a CARBON FOOTPRINT? How to calculate and reduce it? | Climate change"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-background">
+      <section id="how-it-works" className="py-20 bg-muted/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-success">
@@ -225,7 +255,7 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">1. Choose Habits</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Select from a curated list of sustainable actions with real CO₂ impact calculations.
+                  Select from a curated list of sustainable actions.
                 </p>
                 <Badge className="bg-success/20 text-success">Easy Setup</Badge>
               </CardContent>
@@ -253,7 +283,7 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">3. See Impact</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Visualize your CO₂ savings with beautiful charts and grow your virtual forest.
+                  View your CO₂ savings on a personal dashboard.
                 </p>
                 <Badge className="bg-accent/20 text-accent">Visual Progress</Badge>
               </CardContent>
@@ -322,57 +352,122 @@ export const EnhancedHero = ({ onGetStarted }: EnhancedHeroProps) => {
       </section>
 
       {/* CTA Section */}
-      <section id="get-started" className="py-20 bg-gradient-to-br from-success via-primary to-accent relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-blue-500 to-yellow-500 opacity-90" />
-        
+      <section id="get-started" className="py-20 bg-success relative overflow-hidden">
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-4xl lg:text-5xl font-bold text-white">
               Ready to Start Your{' '}
-              <span className="text-yellow-300 animate-pulse">Sustainability Journey</span>?
+              <span className="text-warning">Sustainability Journey</span>?
             </h2>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+            <p className="text-xl text-white max-w-2xl mx-auto">
               Join thousands worldwide in tracking measurable{' '}
-              <span className="text-yellow-300 font-medium">environmental impact</span> and building a{' '}
-              <span className="text-yellow-300 font-medium">sustainable future</span> together.
+              <span className="text-warning font-medium">environmental impact</span> and building a{' '}
+              <span className="text-warning font-medium">sustainable future</span> together.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button 
                 onClick={onGetStarted}
                 size="lg"
-                variant="secondary"
-                className="px-12 py-4 text-xl font-semibold rounded-full bg-white text-emerald-600 hover:bg-yellow-100 hover:text-blue-700 hover:scale-110 transition-all duration-300 shadow-2xl"
+                className="px-12 py-4 text-xl font-semibold bg-[hsl(142,76%,45%)] hover:bg-[hsl(142,76%,40%)] text-white hover:scale-105 transition-all duration-300"
               >
-                🌱 Begin Your Eco Journey Today!
+                Start Your Impact Journey
               </Button>
-              
-              <Button 
-                variant="outline"
-                size="lg"
-                className="px-8 py-4 text-lg border-2 border-white text-white hover:bg-white/20 hover:scale-105 transition-all duration-300"
-              >
-                Learn More About Impact
-              </Button>
-            </div>
-            
-            <div className="flex justify-center space-x-8 pt-8">
-              <div className="text-center text-white">
-                <div className="text-2xl font-bold">500+</div>
-                <div className="text-sm opacity-90">kg CO₂ Saved</div>
-              </div>
-              <div className="text-center text-white">
-                <div className="text-2xl font-bold">1,200+</div>
-                <div className="text-sm opacity-90">Actions Logged</div>
-              </div>
-              <div className="text-center text-white">
-                <div className="text-2xl font-bold">95%</div>
-                <div className="text-sm opacity-90">User Satisfaction</div>
-              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-muted/30 py-12 border-t border-border">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            {/* Brand Section */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <Leaf className="h-6 w-6 text-success" />
+                <span className="text-xl font-bold text-success">eCO₂ Tracker</span>
+              </div>
+              <p className="text-muted-foreground">
+                Making a <span className="text-success font-medium">measurable difference</span> for our planet, one sustainable habit at a time. Join the{' '}
+                <span className="text-success font-medium">movement</span> towards a greener future.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-foreground">Quick Links</h3>
+              <nav className="flex flex-col space-y-2">
+                <a 
+                  href="#home" 
+                  className="text-muted-foreground hover:text-success transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  Home
+                </a>
+                <a 
+                  href="#" 
+                  className="text-muted-foreground hover:text-success transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onGetStarted();
+                  }}
+                >
+                  Track Habits
+                </a>
+                <a 
+                  href="#" 
+                  className="text-muted-foreground hover:text-success transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onGetStarted();
+                  }}
+                >
+                  Dashboard
+                </a>
+                <a 
+                  href="#" 
+                  className="text-muted-foreground hover:text-success transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onGetStarted();
+                  }}
+                >
+                  Green Insights
+                </a>
+                <a 
+                  href="#" 
+                  className="text-muted-foreground hover:text-success transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onGetStarted();
+                  }}
+                >
+                  About
+                </a>
+              </nav>
+            </div>
+
+            {/* Impact Stats */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-foreground">Our Impact</h3>
+              <div className="space-y-3">
+                <div>
+                  <div className="text-3xl font-bold text-success">500kg+</div>
+                  <div className="text-sm text-muted-foreground">CO₂ Saved</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-success">1,200+</div>
+                  <div className="text-sm text-muted-foreground">Actions Logged</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
